@@ -24,8 +24,11 @@ spring:
           multiplier: 2
           max-interval: 20000
           stateless: true
+  jpa:
+    show-sql: true
 
 logging:
   level:
     root: info
     com.beyond.event.driven: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace

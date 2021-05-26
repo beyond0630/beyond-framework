@@ -3,8 +3,12 @@ package com.beyond.event.driven.service.impl;
 import java.util.Date;
 
 import com.beyond.event.driven.common.IdFactory;
+import com.beyond.event.driven.model.entities.InboxHandled;
+import com.beyond.event.driven.model.entities.InboxMessage;
 import com.beyond.event.driven.model.entities.OutboxMessage;
 import com.beyond.event.driven.model.entities.OutboxUnconfirmed;
+import com.beyond.event.driven.repository.InboxHandledRepository;
+import com.beyond.event.driven.repository.InboxMessageRepository;
 import com.beyond.event.driven.repository.OutboxMessageRepository;
 import com.beyond.event.driven.repository.OutboxUnconfirmedRepository;
 import com.beyond.event.driven.service.MessageService;
@@ -15,13 +19,19 @@ import org.springframework.stereotype.Service;
 public class MessageServiceImpl implements MessageService {
 
     private final IdFactory idFactory;
+    private final InboxMessageRepository inboxMessageRepository;
+    private final InboxHandledRepository inboxHandledRepository;
     private final OutboxMessageRepository outboxMessageRepository;
     private final OutboxUnconfirmedRepository outboxUnconfirmedRepository;
 
     public MessageServiceImpl(final IdFactory idFactory,
+                              final InboxMessageRepository inboxMessageRepository,
+                              final InboxHandledRepository inboxHandledRepository,
                               final OutboxMessageRepository outboxMessageRepository,
                               final OutboxUnconfirmedRepository outboxUnconfirmedRepository) {
         this.idFactory = idFactory;
+        this.inboxMessageRepository = inboxMessageRepository;
+        this.inboxHandledRepository = inboxHandledRepository;
         this.outboxMessageRepository = outboxMessageRepository;
         this.outboxUnconfirmedRepository = outboxUnconfirmedRepository;
     }
@@ -52,4 +62,32 @@ public class MessageServiceImpl implements MessageService {
     public void updateOutboxRetried(final String id, final int interval) {
 
     }
+
+    @Override
+    public void addInboxMessage(final InboxMessage message) {
+        final Date now =new Date();
+        message.setId(this.idFactory.nextId());
+        message.setCreatedAt(now);
+        this.inboxMessageRepository.save(message);
+    }
+
+    @Override
+    public boolean isInboxMessageIdExists(final String messageId) {
+        return inboxMessageRepository.existsByMessageId(messageId);
+    }
+
+    @Override
+    public void setInboxMessageHandled(final String key, final String messageId) {
+        final InboxHandled record = new InboxHandled();
+        record.setId(key);
+        record.setMessageId(messageId);
+        record.setCreatedAt(new Date());
+        this.inboxHandledRepository.save(record);
+    }
+
+    @Override
+    public boolean isInboxMessageHandled(final String key) {
+        return this.inboxHandledRepository.existsById(key);
+    }
+
 }

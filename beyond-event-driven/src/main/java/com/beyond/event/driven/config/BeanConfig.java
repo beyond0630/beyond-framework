@@ -23,10 +23,7 @@ import com.beyond.event.driven.publish.impl.TransactionalRabbitEventPublisher;
 import com.beyond.event.driven.publish.impl.UUIDMessageIdFactory;
 import com.beyond.event.driven.service.MessageService;
 import com.beyond.event.driven.subscribe.*;
-import com.beyond.event.driven.subscribe.impl.NoopInboxStore;
-import com.beyond.event.driven.subscribe.impl.RabbitEventSubscriberHost;
-import com.beyond.event.driven.subscribe.impl.RabbitEventSubscriptionRegistry;
-import com.beyond.event.driven.subscribe.impl.TransactionalRabbitEventDispatcher;
+import com.beyond.event.driven.subscribe.impl.*;
 import com.beyond.event.driven.utils.NameUtils;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
@@ -106,8 +103,8 @@ public class BeanConfig {
     }
 
     @Bean
-    public InboxStore inboxStore() {
-        return new NoopInboxStore();
+    public InboxStore inboxStore(final MessageService messageService) {
+        return new DBInboxStore(messageService);
     }
 
     @Bean
