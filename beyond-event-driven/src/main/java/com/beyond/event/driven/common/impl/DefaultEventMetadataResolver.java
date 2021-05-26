@@ -8,7 +8,7 @@ import com.beyond.event.driven.annotation.EventType;
 import com.beyond.event.driven.annotation.Namespace;
 import com.beyond.event.driven.annotation.Topic;
 import com.beyond.event.driven.common.EventMetadata;
-import com.beyond.event.driven.common.EventMetadataOptions;
+import com.beyond.event.driven.option.EventMetadataOptions;
 import com.beyond.event.driven.common.EventMetadataResolver;
 import com.beyond.event.driven.utils.NameUtils;
 import org.slf4j.Logger;

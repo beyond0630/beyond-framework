@@ -3,7 +3,7 @@ package com.beyond.event.driven.publish;
 
 import org.springframework.amqp.core.Message;
 
-public interface MessageOutboxStore {
+public interface OutboxStore {
 
     /**
      * 保存消息

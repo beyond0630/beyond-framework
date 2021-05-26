@@ -2,7 +2,7 @@ package com.beyond.event.driven.publish.impl;
 
 import java.util.UUID;
 
-import com.beyond.event.driven.publish.MessageOutboxStore;
+import com.beyond.event.driven.publish.OutboxStore;
 import com.beyond.event.driven.publish.MessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +19,12 @@ public class RabbitMessageSender implements MessageSender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMessageSender.class);
 
-    private final MessageOutboxStore messageOutboxStore;
+    private final OutboxStore outboxStore;
     private final RabbitTemplate rabbitTemplate;
 
-    public RabbitMessageSender(final MessageOutboxStore messageOutboxStore,
+    public RabbitMessageSender(final OutboxStore outboxStore,
                                final ConnectionFactory connectionFactory) {
-        this.messageOutboxStore = messageOutboxStore;
+        this.outboxStore = outboxStore;
         this.rabbitTemplate = initRabbitTemplate(connectionFactory);
     }
 
@@ -77,7 +77,7 @@ public class RabbitMessageSender implements MessageSender {
         }
         final String messageId = id.substring(i + 1);
         LOGGER.debug("Confirmed message id: {}", messageId);
-        this.messageOutboxStore.deleteConfirmedMessage(messageId);
+        this.outboxStore.deleteConfirmedMessage(messageId);
     }
 
     protected void returnHandler(final Message message, final int replyCode, final String replyText,

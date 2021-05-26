@@ -1,9 +1,10 @@
 package com.beyond.event.driven.publish.impl;
 
 import com.beyond.event.driven.common.*;
+import com.beyond.event.driven.option.EventPublisherOptions;
 import com.beyond.event.driven.publish.EventPublisher;
 import com.beyond.event.driven.publish.MessageIdFactory;
-import com.beyond.event.driven.publish.MessageOutboxStore;
+import com.beyond.event.driven.publish.OutboxStore;
 import com.beyond.event.driven.publish.MessageSender;
 import com.beyond.event.driven.utils.NameUtils;
 import org.slf4j.Logger;
@@ -25,20 +26,20 @@ public class TransactionalRabbitEventPublisher implements EventPublisher {
     private final MessageSender messageSender;
     private final EventSerializer eventSerializer;
     private final MessageIdFactory messageIdFactory;
-    private final MessageOutboxStore messageOutboxStore;
+    private final OutboxStore outboxStore;
     private final EventMetadataResolver eventMetadataResolver;
     private final EventPublisherOptions eventPublisherOptions;
 
     public TransactionalRabbitEventPublisher(final MessageSender messageSender,
                                              final EventSerializer eventSerializer,
                                              final MessageIdFactory messageIdFactory,
-                                             final MessageOutboxStore messageOutboxStore,
+                                             final OutboxStore outboxStore,
                                              final EventMetadataResolver eventMetadataResolver,
                                              final EventPublisherOptions eventPublisherOptions) {
         this.messageSender = messageSender;
         this.eventSerializer = eventSerializer;
         this.messageIdFactory = messageIdFactory;
-        this.messageOutboxStore = messageOutboxStore;
+        this.outboxStore = outboxStore;
         this.eventMetadataResolver = eventMetadataResolver;
         this.eventPublisherOptions = eventPublisherOptions;
     }
@@ -65,7 +66,7 @@ public class TransactionalRabbitEventPublisher implements EventPublisher {
         properties.setHeader(X_ORIGIN_ROUTING_KEY, key);
 
         final Message message = new Message(body, properties);
-        this.messageOutboxStore.save(message);
+        this.outboxStore.save(message);
 
         this.send(this.eventPublisherOptions.getDefaultExchange(), key, message);
     }

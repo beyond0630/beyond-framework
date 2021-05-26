@@ -1,4 +1,4 @@
-package com.beyond.event.driven.common;
+package com.beyond.event.driven.option;
 
 public interface EventMetadataOptions {
 

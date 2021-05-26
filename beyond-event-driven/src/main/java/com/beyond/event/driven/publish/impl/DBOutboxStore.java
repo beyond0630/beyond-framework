@@ -5,18 +5,18 @@ import java.nio.charset.StandardCharsets;
 import com.beyond.event.driven.conts.MessageHeaders;
 import com.beyond.event.driven.enums.BooleanEnum;
 import com.beyond.event.driven.model.entities.OutboxMessage;
-import com.beyond.event.driven.publish.MessageOutboxStore;
+import com.beyond.event.driven.publish.OutboxStore;
 import com.beyond.event.driven.service.MessageService;
 import com.beyond.event.driven.utils.JsonUtils;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.util.Assert;
 
-public class DBMessageOutboxStore implements MessageOutboxStore {
+public class DBOutboxStore implements OutboxStore {
 
     private final MessageService messageService;
 
-    public DBMessageOutboxStore(final MessageService messageService) {
+    public DBOutboxStore(final MessageService messageService) {
         this.messageService = messageService;
     }
 

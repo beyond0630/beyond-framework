@@ -1,9 +1,9 @@
 package com.beyond.event.driven.publish.impl;
 
-import com.beyond.event.driven.publish.MessageOutboxStore;
+import com.beyond.event.driven.publish.OutboxStore;
 import org.springframework.amqp.core.Message;
 
-public class NoopMessageOutboxStore implements MessageOutboxStore {
+public class NoopOutboxStore implements OutboxStore {
 
     @Override
     public void save(final Message message) {

@@ -28,4 +28,4 @@ spring:
 logging:
   level:
     root: info
-    org.beyond.event.driven: debug
+    com.beyond.event.driven: debug
