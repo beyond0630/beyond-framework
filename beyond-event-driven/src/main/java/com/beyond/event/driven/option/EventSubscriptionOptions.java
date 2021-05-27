@@ -21,11 +21,6 @@ public interface EventSubscriptionOptions {
     String getRetryExchange();
 
     /**
-     * 默认队列
-     */
-    String getDefaultQueue();
-
-    /**
      * 死信队列
      */
     String getDeadLetterQueue();

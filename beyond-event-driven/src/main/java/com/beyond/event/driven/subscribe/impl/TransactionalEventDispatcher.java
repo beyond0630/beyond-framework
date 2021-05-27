@@ -13,16 +13,16 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
 
-public class TransactionalRabbitEventDispatcher implements EventDispatcher {
+public class TransactionalEventDispatcher implements EventDispatcher {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionalRabbitEventDispatcher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionalEventDispatcher.class);
 
     private final InboxStore inboxStore;
     private final EventSerializer eventSerializer;
     private final PlatformTransactionManager transactionManager;
     private final EventSubscriptionRegistry subscriptionRegistry;
 
-    public TransactionalRabbitEventDispatcher(final InboxStore inboxStore,
+    public TransactionalEventDispatcher(final InboxStore inboxStore,
                                               final EventSerializer eventSerializer,
                                               final PlatformTransactionManager transactionManager,
                                               final EventSubscriptionRegistry subscriptionRegistry) {

@@ -13,18 +13,14 @@ import com.beyond.event.driven.common.impl.SnowflakeIdFactory;
 import com.beyond.event.driven.option.EventPublisherOptions;
 import com.beyond.event.driven.option.EventRetryOptions;
 import com.beyond.event.driven.option.EventSubscriptionOptions;
-import com.beyond.event.driven.publish.EventPublisher;
-import com.beyond.event.driven.publish.MessageIdFactory;
-import com.beyond.event.driven.publish.MessageSender;
-import com.beyond.event.driven.publish.OutboxStore;
-import com.beyond.event.driven.publish.impl.DBOutboxStore;
-import com.beyond.event.driven.publish.impl.RabbitMessageSender;
-import com.beyond.event.driven.publish.impl.TransactionalRabbitEventPublisher;
-import com.beyond.event.driven.publish.impl.UUIDMessageIdFactory;
+import com.beyond.event.driven.publish.*;
+import com.beyond.event.driven.publish.impl.*;
 import com.beyond.event.driven.service.MessageService;
 import com.beyond.event.driven.subscribe.*;
-import com.beyond.event.driven.subscribe.impl.*;
-import com.beyond.event.driven.utils.NameUtils;
+import com.beyond.event.driven.subscribe.impl.DBInboxStore;
+import com.beyond.event.driven.subscribe.impl.RabbitEventSubscriberHost;
+import com.beyond.event.driven.subscribe.impl.RabbitEventSubscriptionRegistry;
+import com.beyond.event.driven.subscribe.impl.TransactionalEventDispatcher;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -40,7 +36,7 @@ public class BeanConfig {
 
     private static final String EXCHANGE_DEAD_LETTER = "beyond-event-dead-letter";
     private static final String EXCHANGE_RETRY = "beyond-event-retry";
-    private static final String QUEUE_DEAD_LETTER = "beyond-event-dead-letter";
+    private static final String QUEUE_DEAD_LETTER = "beyond-event-retry-queue";
     private static final int DEAD_LETTER_QUEUE_TTL = 120000;
     private static final String NAMESPACE = "beyond.eventdriven";
 
@@ -127,11 +123,6 @@ public class BeanConfig {
             }
 
             @Override
-            public String getDefaultQueue() {
-                return NameUtils.combineSuffix(NAMESPACE, "default");
-            }
-
-            @Override
             public String getDeadLetterQueue() {
                 return QUEUE_DEAD_LETTER;
             }
@@ -170,7 +161,7 @@ public class BeanConfig {
                                            final EventSerializer eventSerializer,
                                            final PlatformTransactionManager transactionManager,
                                            final EventSubscriptionRegistry subscriptionRegistry) {
-        return new TransactionalRabbitEventDispatcher(inboxStore, eventSerializer, transactionManager, subscriptionRegistry);
+        return new TransactionalEventDispatcher(inboxStore, eventSerializer, transactionManager, subscriptionRegistry);
     }
 
     @Bean
@@ -212,5 +203,11 @@ public class BeanConfig {
                                                    final EventSubscriptionRegistry eventSubscriptionRegistry) {
         return new RabbitEventSubscriberHost(eventDispatcher, connectionFactory, eventRetryOptions,
             subscriptionOptions, eventSubscriptionRegistry);
+    }
+
+    @Bean
+    public OutboxRetryManager outboxRetryManager(final OutboxStore outboxStore,
+                                                 final MessageSender messageSender) {
+        return new DefaultOutboxRetryManager(outboxStore, messageSender);
     }
 }

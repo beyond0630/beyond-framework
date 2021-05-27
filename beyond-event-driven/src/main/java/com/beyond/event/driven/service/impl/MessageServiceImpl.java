@@ -1,6 +1,8 @@
 package com.beyond.event.driven.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.beyond.event.driven.common.IdFactory;
 import com.beyond.event.driven.model.entities.InboxHandled;
@@ -13,6 +15,8 @@ import com.beyond.event.driven.repository.OutboxMessageRepository;
 import com.beyond.event.driven.repository.OutboxUnconfirmedRepository;
 import com.beyond.event.driven.service.MessageService;
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -88,6 +92,15 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public boolean isInboxMessageHandled(final String key) {
         return this.inboxHandledRepository.existsById(key);
+    }
+
+    @Override
+    public List<OutboxMessage> listOutboxUnconfirmed(final int limit) {
+        final Pageable page = PageRequest.of(1, limit);
+        return this.outboxUnconfirmedRepository.findAllByNextRetryBeforeOrderByNextRetry(new Date(), page)
+            .get()
+            .map(x -> this.outboxMessageRepository.findByMessageId(x.getId()))
+            .collect(Collectors.toList());
     }
 
 }

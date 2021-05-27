@@ -1,6 +1,8 @@
 package com.beyond.event.driven.publish.impl;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.beyond.event.driven.conts.MessageHeaders;
 import com.beyond.event.driven.enums.BooleanEnum;
@@ -44,7 +46,20 @@ public class DBOutboxStore implements OutboxStore {
     }
 
     @Override
-    public void updateOutboxRetried(final long id, final int interval) {
+    public List<Message> listUnconfirmed(final int limit) {
+        final List<OutboxMessage> unconfirmed = this.messageService.listOutboxUnconfirmed(limit);
 
+        return unconfirmed.stream()
+            .map(x -> {
+                final MessageProperties props = JsonUtils.deserialize(x.getProperties(), MessageProperties.class);
+                return new Message(x.getBody().getBytes(StandardCharsets.UTF_8), props);
+            })
+            .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public void updateOutboxRetried(final String id, final int interval) {
+        this.messageService.updateOutboxRetried(id, interval);
     }
 }

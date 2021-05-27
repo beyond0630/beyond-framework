@@ -87,6 +87,7 @@ public class RabbitEventSubscriberHost implements EventSubscriberHost, Initializ
             defaultRetryPolicy.setMaxAttempts(this.eventRetryOptions.maxAttempts());
 
             final Map<Class<? extends Throwable>, RetryPolicy> policyMap = new HashMap<>();
+            // 出现空指针之后不重试
             policyMap.put(NullPointerException.class, new NeverRetryPolicy());
 
             retryPolicy = new ExceptionClassifierRetryPolicy();

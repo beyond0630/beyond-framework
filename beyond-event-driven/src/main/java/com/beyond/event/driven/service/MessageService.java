@@ -1,5 +1,7 @@
 package com.beyond.event.driven.service;
 
+import java.util.List;
+
 import com.beyond.event.driven.model.entities.InboxMessage;
 import com.beyond.event.driven.model.entities.OutboxMessage;
 
@@ -18,4 +20,7 @@ public interface MessageService {
     void setInboxMessageHandled(String key, String messageId);
 
     boolean isInboxMessageHandled(String key);
+
+    List<OutboxMessage> listOutboxUnconfirmed(int limit);
+
 }
