@@ -12,10 +12,10 @@ INSERT INTO `br_permission` VALUES (3, 'DELETE_ROLE', '删除角色', 'DELETE-/a
 INSERT INTO `br_permission` VALUES (4, 'ADD_PERMISSION', '添加权限', 'POST-/api/permissions', b'0');
 INSERT INTO `br_permission` VALUES (5, 'EDIT_PERMISSION', '编辑权限', 'PUT-/api/permissions', b'0');
 INSERT INTO `br_permission` VALUES (6, 'DELETE_PERMISSION', '删除权限', 'DELETE-/api/permissions', b'0');
-INSERT INTO `br_permission` VALUES (7, 'ADD_USER_ROLE', '添加用户角色', 'POST-/api/users/roles', b'0');
-INSERT INTO `br_permission` VALUES (8, 'DELETE_USER_ROLE', '删除用户角色', 'DELETE-/api/users/roles', b'0');
-INSERT INTO `br_permission` VALUES (9, 'ADD_ROLE_PERMISSION', '添加角色权限', 'POST-/api/roles/permissions', b'0');
-INSERT INTO `br_permission` VALUES (10, 'DELETE_ROLE_PERMISSION', '删除角色权限', 'DELETE-/api/roles/permissions', b'0');
+INSERT INTO `br_permission` VALUES (7, 'ADD_USER_ROLE', '添加用户角色', 'POST-/api/users/{userId}/roles', b'0');
+INSERT INTO `br_permission` VALUES (8, 'DELETE_USER_ROLE', '删除用户角色', 'DELETE-/api/users/{userId}/roles', b'0');
+INSERT INTO `br_permission` VALUES (9, 'ADD_ROLE_PERMISSION', '添加角色权限', 'POST-/api/roles/{code}/permissions', b'0');
+INSERT INTO `br_permission` VALUES (10, 'DELETE_ROLE_PERMISSION', '删除角色权限', 'DELETE-/api/roles/{code}/permissions', b'0');
 
 
 INSERT INTO `br_role_permission` VALUES (1, 'ADMIN', 'ADD_ROLE', b'0');
