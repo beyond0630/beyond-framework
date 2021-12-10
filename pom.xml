@@ -13,6 +13,7 @@
         <module>beyond-longpolling</module>
         <module>beyond-event-bus</module>
         <module>beyond-nacos-config</module>
+        <module>beyond-rabc</module>
     </modules>
 
     <properties>
@@ -73,6 +74,12 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${google.guave}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>0.9.1</version>
             </dependency>
 
             <dependency>
