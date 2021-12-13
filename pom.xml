@@ -12,7 +12,6 @@
     <modules>
         <module>beyond-longpolling</module>
         <module>beyond-event-bus</module>
-        <module>beyond-nacos-config</module>
         <module>beyond-rabc</module>
     </modules>
 
