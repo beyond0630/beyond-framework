@@ -27,4 +27,13 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Integer>, Jp
      */
     int deleteByRoleCode(String roleCode);
 
+    /**
+     * 判断是否已存在记录
+     *
+     * @param userId   user Id
+     * @param roleCode 角色编码
+     * @return
+     */
+    boolean existsByUserIdAndRoleCode(long userId, String roleCode);
+
 }

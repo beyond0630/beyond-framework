@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.beyond.rabc.config.CacheConfig;
+import org.beyond.rabc.exception.ApiException;
 import org.beyond.rabc.exception.DataNotFoundException;
 import org.beyond.rabc.model.entity.Role;
 import org.beyond.rabc.model.entity.User;
@@ -44,6 +45,11 @@ public class UserRoleServiceImpl implements UserRoleService {
         Role role = roleRepository.getByCode(roleCode);
         if (role == null || role.isDisabled()) {
             throw new DataNotFoundException("角色[code=" + roleCode + "]不存在");
+        }
+
+        boolean exists = userRoleRepository.existsByUserIdAndRoleCode(userId, roleCode);
+        if (exists) {
+            throw new ApiException("用户[id=" + userId + "]已拥有该角色");
         }
         UserRole userRole = new UserRole();
         userRole.setUserId(user.getId());
