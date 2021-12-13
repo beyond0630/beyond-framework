@@ -5,12 +5,12 @@ import java.util.Map;
 
 import io.jsonwebtoken.lang.Assert;
 import org.beyond.rabc.biz.TokenStore;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Beyond
  */
-@Component
+//@Component
+@Deprecated
 public class MemoryTokenStore implements TokenStore {
 
     private static final Map<Long, String> STORE = new HashMap<>(1024);

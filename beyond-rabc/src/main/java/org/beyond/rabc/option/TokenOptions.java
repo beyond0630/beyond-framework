@@ -9,8 +9,18 @@ import io.jsonwebtoken.SignatureAlgorithm;
  */
 public interface TokenOptions {
 
+    /**
+     * 签发人
+     *
+     * @return string
+     */
     String getIssuer();
 
+    /**
+     * 受众
+     *
+     * @return string
+     */
     String getAudience();
 
     /**
