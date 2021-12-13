@@ -1,5 +1,6 @@
 package org.beyond.rabc.service.impl;
 
+import org.beyond.rabc.exception.ApiException;
 import org.beyond.rabc.exception.DataNotFoundException;
 import org.beyond.rabc.model.entity.Role;
 import org.beyond.rabc.model.param.AddOrUpdateRole;
@@ -30,6 +31,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void saveRole(final AddOrUpdateRole params) {
+        boolean exists = roleRepository.existsByCode(params.getCode());
+        if (exists) {
+            throw new ApiException("已存在code=" + params.getCode() + "的角色");
+        }
+
         Role role = new Role();
         role.setCode(params.getCode());
         role.setName(params.getName());

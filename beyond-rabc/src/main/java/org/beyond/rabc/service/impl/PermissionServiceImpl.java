@@ -1,5 +1,6 @@
 package org.beyond.rabc.service.impl;
 
+import org.beyond.rabc.exception.ApiException;
 import org.beyond.rabc.exception.DataNotFoundException;
 import org.beyond.rabc.model.entity.Permission;
 import org.beyond.rabc.model.param.AddOrUpdatePermission;
@@ -26,6 +27,10 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public void savePermission(final AddOrUpdatePermission params) {
+        boolean exists = this.permissionRepository.existsByCode(params.getCode());
+        if (exists) {
+            throw new ApiException("已存在code = " + params.getCode() + "的数据");
+        }
         Permission permission = new Permission();
         permission.setCode(params.getCode());
         permission.setName(params.getName());
