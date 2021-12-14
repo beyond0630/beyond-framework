@@ -21,11 +21,5 @@ public interface TokenManager {
      */
     String createToken(long userId);
 
-    /**
-     * 清除 token
-     *
-     * @param userId 用户 id
-     */
-    void removeToken(long userId);
 
 }

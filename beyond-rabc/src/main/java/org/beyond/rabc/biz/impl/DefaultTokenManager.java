@@ -7,7 +7,6 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.beyond.rabc.biz.TokenManager;
-import org.beyond.rabc.biz.TokenStore;
 import org.beyond.rabc.common.IdFactory;
 import org.beyond.rabc.option.TokenOptions;
 import org.slf4j.Logger;
@@ -27,29 +26,16 @@ public class DefaultTokenManager implements TokenManager {
 
     private final IdFactory idFactory;
     private final TokenOptions options;
-    private final TokenStore tokenStore;
 
     public DefaultTokenManager(final IdFactory idFactory,
-                               final TokenOptions options,
-                               final TokenStore tokenStore) {
+                               final TokenOptions options) {
         this.idFactory = idFactory;
         this.options = options;
-        this.tokenStore = tokenStore;
     }
 
     @Override
     public long verifyToken(final String token) {
-        long userId = this.parseToken(token);
-        if (userId == -1) {
-            return -1;
-        }
-        boolean success = tokenStore.checkToken(userId, token);
-        return success ? userId : -1;
-    }
-
-    protected long parseToken(final String token) {
         Jws<Claims> jws;
-
         try {
             jws = Jwts.parser()
                 .setClock(Date::new)
@@ -64,12 +50,16 @@ public class DefaultTokenManager implements TokenManager {
         }
 
         Claims body = jws.getBody();
+        Date expiration = body.getExpiration();
+        if (expiration != null && expiration.before(new Date())) {
+            return -1;
+        }
         return Long.parseLong(body.get(CLAIM_USER_ID, String.class));
     }
 
     @Override
     public String createToken(final long userId) {
-        String token = Jwts.builder()
+        return Jwts.builder()
             .signWith(this.options.getAlgorithm(), this.options.getSecretKey())
             .setIssuer(options.getIssuer())
             .setAudience(options.getAudience())
@@ -79,13 +69,7 @@ public class DefaultTokenManager implements TokenManager {
             .claim(CLAIM_APP_ENV, this.options.getEnv())
             .claim(CLAIM_USER_ID, Long.toString(userId))
             .compact();
-        tokenStore.storeToken(userId, token);
-        return token;
     }
 
-    @Override
-    public void removeToken(final long userId) {
-        this.tokenStore.removeToken(userId);
-    }
 
 }

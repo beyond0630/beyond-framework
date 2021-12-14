@@ -6,10 +6,6 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/beyond-rabc?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false
     username: root
     password: beyond
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    database: 0
   jpa:
     show-sql: true
 
