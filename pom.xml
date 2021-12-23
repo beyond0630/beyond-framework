@@ -12,7 +12,7 @@
     <modules>
         <module>beyond-longpolling</module>
         <module>beyond-event-bus</module>
-        <module>beyond-rabc</module>
+        <module>beyond-rbac</module>
     </modules>
 
     <properties>
