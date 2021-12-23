@@ -7,10 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Beyond
  */
 @SpringBootApplication
-public class beyondRbacApplication {
+public class BeyondRbacApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(beyondRbacApplication.class, args);
+        SpringApplication.run(BeyondRbacApplication.class, args);
     }
 
 }
