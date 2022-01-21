@@ -26,4 +26,11 @@ public class UserRoleController {
         return Result.ok();
     }
 
+    @DeleteMapping("/{userRoleId}")
+    public Result<?> removeRole(@PathVariable long userId,
+                                @PathVariable int userRoleId) {
+        userRoleService.removeRole(userRoleId);
+        return Result.ok();
+    }
+
 }

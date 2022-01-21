@@ -55,13 +55,16 @@ public class UserRoleServiceImpl implements UserRoleService {
         userRole.setUserId(user.getId());
         userRole.setRoleCode(roleCode);
         userRoleRepository.save(userRole);
-        cache.clear();
+        cache.remove(userId);
     }
 
     @Override
     public void removeRole(final int userRoleId) {
-        userRoleRepository.deleteById(userRoleId);
-        cache.clear();
+        userRoleRepository.findById(userRoleId)
+            .ifPresent(x -> {
+                userRoleRepository.deleteById(userRoleId);
+                cache.remove(x.getUserId());
+            });
     }
 
     @Override

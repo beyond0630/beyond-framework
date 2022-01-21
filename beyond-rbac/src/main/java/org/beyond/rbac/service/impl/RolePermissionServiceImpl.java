@@ -67,11 +67,16 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         rolePermission.setRoleCode(roleCode);
         rolePermission.setPermissionCode(permissionCode);
         rolePermissionRepository.save(rolePermission);
+        cache.remove(roleCode);
     }
 
     @Override
     public void revoke(final int rolePermissionId) {
-        rolePermissionRepository.deleteById(rolePermissionId);
+        rolePermissionRepository.findById(rolePermissionId)
+            .ifPresent(x -> {
+                rolePermissionRepository.deleteById(rolePermissionId);
+                cache.remove(x.getRoleCode());
+            });
     }
 
 }
