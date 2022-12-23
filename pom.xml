@@ -12,6 +12,7 @@
     <modules>
         <module>beyond-event-bus</module>
         <module>beyond-cache</module>
+        <module>beyond-config</module>
     </modules>
 
     <properties>
@@ -21,6 +22,8 @@
         <beyond.common.version>1.0.0</beyond.common.version>
         <caffeine.version>2.9.3</caffeine.version>
         <ehcache.version>3.9.9</ehcache.version>
+        <aspectjweaver.version>1.9.6</aspectjweaver.version>
+        <spring-core.version>5.3.15</spring-core.version>
     </properties>
 
     <dependencyManagement>
@@ -38,6 +41,18 @@
             </dependency>
 
             <dependency>
+                <groupId>com.beyond</groupId>
+                <artifactId>beyond-config</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.beyond</groupId>
+                <artifactId>beyond-event-bus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.ehcache</groupId>
                 <artifactId>ehcache</artifactId>
                 <version>${ehcache.version}</version>
@@ -49,19 +64,20 @@
                 <version>${caffeine.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectjweaver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring-core.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${springboot.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 
 </project>
